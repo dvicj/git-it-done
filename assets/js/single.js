@@ -1,5 +1,6 @@
 //variables 
 var issueContainerEl = document.querySelector("#issues-container"); //reference to issue container in html - 6.3.5
+var limitWarningEl = document.querySelector("#limit-warning"); // reference to warning container in html - 6.3.6
 
 //function that will take a repo name as a parameter - 6.3.4
 var getRepoIssues = function(repo) {
@@ -10,6 +11,10 @@ var getRepoIssues = function(repo) {
             response.json().then(function(data) {
                 //pass response data to dom function 
                 displayIssues(data); //only call this function if response.ok - 6.3.5 
+                //check if api has paginated issues - ie more than 30 issues - 6.3.6 
+                if(response.headers.get("Link")){ //checks for link header
+                    displayWarning(repo);
+                }
             });
         } else {//request was not successful 
             alert("There was a problem with your requesr!");
@@ -48,5 +53,16 @@ var displayIssues = function(issues) {
         issueContainerEl.appendChild(issueEl);
     }
 }
+
+var displayWarning = function(repo) { //6.3.6
+    //add text to warning container 
+    limitWarningEl.textContent = "To see more than 30 issues, visit ";
+    var linkEl = document.createElement("a");
+    linkEl.textContent = "See More Issues on Github.com";
+    linkEl.setAttribute("href", "https://github.com/" + repo + "/issues");
+    linkEl.setAttribute("target", "_blank"); 
+    //append to warning container 
+    limitWarningEl.appendChild(linkEl);
+};
 
 getRepoIssues("facebook/react"); 
