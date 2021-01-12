@@ -1,11 +1,34 @@
+
+//card / form element - make form for searching cities 
+//reference to <form> with an id of user-form
+var userFormEl = document.querySelector("#user-form");
+//reference to <input> with an id of username
+var nameInputEl = document.querySelector("#username"); 
+//reference to <div> with an id of repos-container - 6.2.5
+var repoContainerEl = document.querySelector("#repos-container");
+//reference to <span> container with an id of repo-search-term - 6.2.5
+var repoSearchTerm = document.querySelector("#repo-search-term");
+
+//function that executes upon a form submission browser event 6.2.4
+var formSubmitHandler = function(event) {
+    //prevents page from refreshing
+    event.preventDefault(); 
+    //get value of the form input element and send to getUserRepos() 6.2.4 - get city value and send to above function 
+    var username = nameInputEl.value.trim(); //get value from the <input> element, ie. nameInputEl, value is stored in "username" variable - use trim to get rid of any leading or trailing white spaces 
+
+    if(username) { //checks value - if the username matches: 6.2.4 - if the city matches 
+        getUserRepos(username); // run function with the selected username 6.2.4 - run function with city name ie. getUserRepos(ottawa)
+        repoContainerEl.textContent="";
+        nameInputEl.value = ""; //clears the <input>element's value - clears the form - 6.2.4
+    } else { //if the username does not match: 6.2.4
+        alert("Please enter a GitHub username");
+    }
+    console.log(event);
+};
+
 //this function "fetches" the info (HTTP request) from GitHub API
 //GitHub replies with JSON data -- use this for weather server API
 var getUserRepos = function(user) {
-    //check if api returned any repos - 6.2.6
-    if (repos.length === 0) { //if the array of repos is 0 
-        repoContainerEl.textContent = "No repositories found."; // add text to the repoContainerEl
-        return; //return to beginning of getUserRepos function 
-    }
     //format the github api url - can enter any username in "user"
     var apiURL = "https://api.github.com/users/" + user + "/repos";
     //make a request to the URL - 6.2.5 edited - 6.2.6 edited (404 ERROR and network connectivity)
@@ -25,41 +48,19 @@ var getUserRepos = function(user) {
     }); 
 };
 
-//VARIABLES 
-
-//card / form element - make form for searching cities 
-//reference to <form> with an id of user-form
-var userFormEl = document.querySelector("#user-form");
-//reference to <input> with an id of username
-var nameInputEl = document.querySelector("#username"); 
-//reference to <div> with an id of repos-container - 6.2.5
-var repoContainerEl = document.querySelector("#repos-container");
-//reference to <span> container with an id of repo-search-term - 6.2.5
-var repoSearchTerm = document.querySelector("#repo-search-term");
-
-
-
-//function that executes upon a form submission browser event 6.2.4
-var formSubmitHandler = function(event) {
-    event.preventDefault(); 
-    //get value of the form input element and send to getUserRepos() 6.2.4 - get city value and send to above function 
-    var username = nameInputEl.value.trim(); //get value from the <input> element, ie. nameInputEl, value is stored in "username" variable - use trim to get rid of any leading or trailing white spaces 
-
-    if(username) { //checks value - if the username matches: 6.2.4 - if the city matches 
-        getUserRepos(username); // run function with the selected username 6.2.4 - run function with city name ie. getUserRepos(ottawa)
-        nameInputEl.value = ""; //clears the <input>element's value - clears the form - 6.2.4
-    } else { //if the username does not match: 6.2.4
-        alert("Please enter a GitHub username");
-    }
-    console.log(event);
-};
-
 //will accept both the array of the repo data(repos) and the term we searched(searchTerm) for as parameters - 6.2.5
 var displayRepos = function(repos, searchTerm) {
     console.log(repos);
     console.log("This is the user's username: " + searchTerm);
+    //check if api returned any repos - 6.2.6
+    if (repos.length === 0) { //if the array of repos is 0 
+    repoContainerEl.textContent = "No repositories found."; // add text to the repoContainerEl
+    return; //return to beginning of getUserRepos function 
+    }
+
     //clear old user inputted content before displaying new content 6.2.5
     repoContainerEl.textContent = ""; //clears text from repoContainerEl 6.2.5
+    
     repoSearchTerm.textContent = searchTerm; //ensures the page displays the username/search term
     //loop over repos 6.2.5
     for (var i=0; i<repos.length; i++) { //loops over # of arrays of each user
