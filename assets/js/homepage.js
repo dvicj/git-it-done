@@ -1,14 +1,28 @@
 //this function "fetches" the info (HTTP request) from GitHub API
 //GitHub replies with JSON data -- use this for weather server API
 var getUserRepos = function(user) {
+    //check if api returned any repos - 6.2.6
+    if (repos.length === 0) { //if the array of repos is 0 
+        repoContainerEl.textContent = "No repositories found."; // add text to the repoContainerEl
+        return; //return to beginning of getUserRepos function 
+    }
     //format the github api url - can enter any username in "user"
     var apiURL = "https://api.github.com/users/" + user + "/repos";
-    //make a request to the URL - 6.2.5 edited 
+    //make a request to the URL - 6.2.5 edited - 6.2.6 edited (404 ERROR and network connectivity)
     fetch(apiURL).then(function(response) {
-        response.json().then(function(data) {
-            displayRepos(data,user); //when the response data is converted to JSON, it will be sent from getUserRepos to displayRepos 
-        });
-    });
+        //request for data was successful 
+        if (response.ok) { //"ok" - when the HTTP request status code is something in the 200s - ok = true 404 error - 6.2.6
+            response.json().then(function(data) {
+                displayRepos(data,user); //when the response data is converted to JSON, it will be sent from getUserRepos to displayRepos 
+            });
+        } else { //ok = false (not in the 200s)
+            alert("Error: " + response.statusText); //statusText property - what the issue is 
+        }
+    })
+    .catch(function(error) { //6.2.6 - catch is way of handling nextwork errors - if successful will get returned in the .then() method if request fails it will be sent to .catch() method 
+        //notice this .catch() getting chained onto the end of the .then() method
+        alert("Unable to connect to GitHub"); 
+    }); 
 };
 
 //VARIABLES 
