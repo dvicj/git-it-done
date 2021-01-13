@@ -8,7 +8,8 @@ var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 //reference to <span> container with an id of repo-search-term - 6.2.5
 var repoSearchTerm = document.querySelector("#repo-search-term");
-
+//6.5.6
+var languageButtonsEl = document.querySelector("#language-buttons");
 //function that executes upon a form submission browser event 6.2.4
 var formSubmitHandler = function(event) {
     //prevents page from refreshing
@@ -22,6 +23,16 @@ var formSubmitHandler = function(event) {
         nameInputEl.value = ""; //clears the <input>element's value - clears the form - 6.2.4
     } else { //if the username does not match: 6.2.4
         alert("Please enter a GitHub username");
+    }
+};
+
+//function that accepts event as a parameter - 6.5.6
+var buttonClickHandler = function(event) {
+    var language = event.target.getAttribute("data-language"); //get attribute of the event target (button)
+    if (language) {
+        getFeaturedRepos(language); //run function if true, will only run when buttons with data-* (data-language) attributes are clicked 
+        //clear old content 
+        repoContainerEl.textContent=""; 
     }
 };
 
@@ -107,6 +118,11 @@ var displayRepos = function(repos, searchTerm) {
         repoContainerEl.appendChild(repoEl); //append repo to dom 6.2.5 - add div to container 
     }
 };
+
+
 //add event listener - when submit button is clicked, formSubmitHandler function will execute 6.2.4
 userFormEl.addEventListener("submit", formSubmitHandler);
+//add evenet listener - when language button is clicked, buttonClickHandler function will execute 6.5.6
+languageButtonsEl.addEventListener("click", buttonClickHandler);
+
 
