@@ -3,8 +3,21 @@ var issueContainerEl = document.querySelector("#issues-container"); //reference 
 var limitWarningEl = document.querySelector("#limit-warning"); // reference to warning container in html - 6.3.6
 var repoNameEl = document.querySelector("#repo-name"); // reference to span in html - 6.4.4
 
+//6.4.4
+var getRepoName = function() {
+    //get repo name from url query string 
+    var queryString = document.location.search; //extract the repo name from the query string ie. ?repo=microsoft/activities - 6.4.4
+    var repoName = queryString.split("=")[1]; //breaks the string apart at "=", creates two elements in an array ie. [0]?repo and [1]microsoft/activities - 6.4.4
+    if(repoName){//check for valid values before passing to function calls - make sure reponame exists - 6.4.5
+        repoNameEl.textContent = repoName; 
+        getRepoIssues(repoName); 
+    } else { //repo name does not exist/ none given
+        document.location.replace("./index.html"); //redirects user back to homepage to try again - replace() replaces the current resource or page with the one at the provided url -6.4.5
+    }
+}
+
 //function that will take a repo name as a parameter - 6.3.4 - repoName as parameter - 6.4.4
-var getRepoIssues = function(repo, repoName) {
+var getRepoIssues = function(repo) {
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc"; 
     fetch(apiUrl).then(function(response){
         //request was successful 
@@ -18,18 +31,11 @@ var getRepoIssues = function(repo, repoName) {
                 }
             });
         } else {//request was not successful 
-            alert("There was a problem with your request!");
+            document.location.replace("./index.html"); //redirects user back to homepage to try again - replace() replaces the current resource or page with the one at the provided url -6.4.5
         }
     });    
 };
 
-//6.4.4
-var getRepoName = function() {
-    var queryString = document.location.search; //extract the repo name from the query string ie. ?repo=microsoft/activities
-    var repoName = queryString.split("=")[1]; //breaks the string apart at "=", creates two elements in an array ie. [0]?repo and [1]microsoft/activities
-    getRepoIssues(repoName);
-    repoNameEl.textContent = repoName; 
-}
 
 //function which accepts a parameter of "issues" - 6.3.5
 var displayIssues = function(issues) {
@@ -75,4 +81,3 @@ var displayWarning = function(repo) { //6.3.6
 };
 //function calls 
 getRepoName(); 
-getRepoIssues(); 

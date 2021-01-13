@@ -23,7 +23,6 @@ var formSubmitHandler = function(event) {
     } else { //if the username does not match: 6.2.4
         alert("Please enter a GitHub username");
     }
-    console.log(event);
 };
 
 //this function "fetches" the info (HTTP request) from GitHub API
