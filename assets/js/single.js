@@ -1,9 +1,10 @@
 //variables 
 var issueContainerEl = document.querySelector("#issues-container"); //reference to issue container in html - 6.3.5
 var limitWarningEl = document.querySelector("#limit-warning"); // reference to warning container in html - 6.3.6
+var repoNameEl = document.querySelector("#repo-name"); // reference to span in html - 6.4.4
 
-//function that will take a repo name as a parameter - 6.3.4
-var getRepoIssues = function(repo) {
+//function that will take a repo name as a parameter - 6.3.4 - repoName as parameter - 6.4.4
+var getRepoIssues = function(repo, repoName) {
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc"; 
     fetch(apiUrl).then(function(response){
         //request was successful 
@@ -17,10 +18,18 @@ var getRepoIssues = function(repo) {
                 }
             });
         } else {//request was not successful 
-            alert("There was a problem with your requesr!");
+            alert("There was a problem with your request!");
         }
     });    
 };
+
+//6.4.4
+var getRepoName = function() {
+    var queryString = document.location.search; //extract the repo name from the query string ie. ?repo=microsoft/activities
+    var repoName = queryString.split("=")[1]; //breaks the string apart at "=", creates two elements in an array ie. [0]?repo and [1]microsoft/activities
+    getRepoIssues(repoName);
+    repoNameEl.textContent = repoName; 
+}
 
 //function which accepts a parameter of "issues" - 6.3.5
 var displayIssues = function(issues) {
@@ -64,5 +73,6 @@ var displayWarning = function(repo) { //6.3.6
     //append to warning container 
     limitWarningEl.appendChild(linkEl);
 };
-
-getRepoIssues("facebook/react"); 
+//function calls 
+getRepoName(); 
+getRepoIssues(); 
