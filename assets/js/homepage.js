@@ -67,9 +67,10 @@ var displayRepos = function(repos, searchTerm) {
         //format repo name 6.2.5 
         //taking each repository "repos[i]"" and writing some of it's data to the page (owner and login and name)
         var repoName = repos[i].owner.login + "/" + repos[i].name //repos, owner, login, name all from API data 
-        //create a conatiner for each repo 6.2.5
-        var repoEl = document.createElement("div"); //create a new div element called repoEl 6.2.5
+        //create a link for each repo 6.2.5
+        var repoEl = document.createElement("a"); //create a new div element called repoEl 6.2.5 - changed to <a> - 6.4.3
         repoEl.classList = "list-item flex-row justify-space-between align-center"; //apply classed to repoEl <div> 6.2.5
+        repoEl.setAttribute("href", "./single-repo.html?repo="+repoName); //added href attribute to <a> - 6.4.3 - updated: using query parametr to pass a reponame from index.html to single-repo.html
         //create a span element to hold repository name 6.2.5
         var titleEl = document.createElement("span"); //create a new span element called titleEl 6.2.5 
         titleEl.textContent = repoName; // add repoName to titleEl - to hold formatted repository name 
