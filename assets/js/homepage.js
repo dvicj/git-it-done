@@ -25,6 +25,20 @@ var formSubmitHandler = function(event) {
     }
 };
 
+//accepts a language parameter, creates an API endpoint and makes a HTTP request - 6.5.4
+var getFeaturedRepos = function(language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+    fetch(apiUrl).then(function(response) {
+        if(response.ok) {
+            response.json().then(function(data) {
+                displayRepos(data.items, language); //pass data.items and language parameters in displayRepos() - 6.5.4
+            }); 
+        } else {
+            alert("Error: " + response.statusText);
+        }
+    });
+};
+
 //this function "fetches" the info (HTTP request) from GitHub API
 //GitHub replies with JSON data -- use this for weather server API
 var getUserRepos = function(user) {
